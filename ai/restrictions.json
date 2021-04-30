@@ -1,0 +1,23 @@
+{
+  "ability": {
+    "いる": [
+      {
+        "living thing": [
+          "person",
+          "animal"
+        ]
+      }
+    ],
+    "ある": [
+      {
+        "living thing": [
+          "plant"
+        ]
+      },
+      {
+        "intangible": [],
+        "tangible": []
+      }
+    ]
+  }
+}
