@@ -19,7 +19,6 @@ pip3 install virtualenv
 cd /path/to/this/directory
 virtualenv venv
 source venv/bin/activate
-pip install -r requirements.txt
 ```
 
 Optionally, one can use virtualenvwrapper as well
@@ -34,8 +33,10 @@ mkproject japanese
 git clone git@github.com:PentheusLennuye/japanese.git
 ```
 
-Don't forget the packages!
+Install the software
 ```
+yum groupinstall 'Development Tools'
+yum install gcc-c++ gtk2-devel gtk3-devel python3-devel
 pip install -r requirements.txt
 ```
 
