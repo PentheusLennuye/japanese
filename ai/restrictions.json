@@ -4,7 +4,9 @@
       {
         "living thing": [
           "person",
-          "animal"
+          "animal",
+	  "spirit",
+	  "occupation"
         ]
       }
     ],

@@ -4,6 +4,9 @@ from .basics import (get_kanji, get_furigana, load_from_json,
                      keyed_dictionary)
 
 
+articles = ['a', 'an', 'the']
+
+
 class NounPhrase:
     def __init__(self, noun_dict, key='english'):
         self.noun_dict = noun_dict
@@ -17,17 +20,18 @@ class NounPhrase:
         self._set_splitter()
 
     def build_noun_phrase(self, noun, purpose='subject', predicate=None,
-                          emphasis=False):
+                          emphasis=False, action=True):
         '''
         Builds an array as follows:
         [ [kanji, furigana], [kanji, furigana], ....]
+        Emphasis is only used for subject, and action will modify location.
         '''
         self.noun_phrase = []
         self.purpose = purpose
         self.predicate = predicate
         self.emphasis = emphasis
-        self._set_particle()
-        self._split_nouns(noun)
+        self._set_particle(action)
+        self._split_nouns(self._lose_the_article(noun))
 
     def get_noun_phrase(self):
         ''' returns [kanji, furigana],[k, f]...],[particle, '']'''
@@ -38,6 +42,12 @@ class NounPhrase:
     def _set_splitter(self):
         if self.key == 'kanji':
             self.splitter = 'の'
+
+    def _lose_the_article(self, noun):
+        tokens = noun.split()
+        if tokens[0].lower() in articles:
+            return ' '.join(tokens[1:])
+        return noun
 
     def _split_nouns(self, noun):
         if noun in self.noun_dict:
@@ -77,20 +87,47 @@ class NounPhrase:
                 'her': ['彼女', 'かのじょ'],
                 'their': ['彼ら', 'かれら']
             }
+        if possessive not in possessives:
+            return False
         self.noun_phrase += [possessives[possessive], ['の', '']]
+        return True
 
-    def _set_particle(self):
+    def _add_determiner(self, determiner):
+        if self.key == 'kanji':
+            determiners = {
+                'この': ['この', ''],
+                'その': ['その', ''],
+                'あの': ['あの', '']
+            }
+        else:
+            determiners = {
+                'this': ['この', ''],
+                'that': ['その', ''],
+                'that there': ['あの', '']
+            }
+        if determiner not in determiners:
+            return False
+        self.noun_phrase += [determiners[determiner], ['の', '']]
+        return True
+
+    def _set_particle(self, action):
         purpose = self.purpose
         emphasis = self.emphasis
         particles = {
                 'subject': ['は', ''],
                 'indirect object': ['に', ''],
-                'location': ['で', '']
+                'location': ['に', ''],
+                'complement': [],
         }
         if purpose == 'subject' and emphasis:
             self.particle = ['が', '']
+        elif purpose == 'location' and action:
+            self.particle = ['で', '']
         elif purpose == 'direct object':
-            self.particle = [self.predicate['particle'], '']
+            if 'particle' in self.predicate:
+                self.particle = [self.predicate['particle'], '']
+            else:
+                self.particle = ['', '']
         else:
             self.particle = particles[purpose]
 

@@ -1,60 +1,29 @@
 #!/usr/bin/env python3
 
-import json
-import shutil
+from conf import CHAPTER, DICTIONARY_DIR
+from lib.basics import (load_from_json,
+                        save_to_json,
+                        get_basics,
+                        confirm)
 
-WE_ARE = '../dictionary/demonstratives'
-FILE = "{}.json".format(WE_ARE)
+WE_ARE = 'demonstratives'
+FILE = "{}/{}.json".format(DICTIONARY_DIR, WE_ARE)
 
 
 def start():
-    try:
-        with open(FILE) as fp:
-            db = json.load(fp)
-    except FileNotFoundError:
-        db = {WE_ARE: []}
+    cur_chapter = CHAPTER
+    db = load_from_json(FILE, WE_ARE)
+    print("Currently at {} words".format(len(db)))
     while True:
-        english = input("English word (or STOP to quit): ").strip()
-        if english == '':
-            continue
-        if english == 'STOP':
+        english, kana, kanji, chapter, cur_chapter = get_basics(cur_chapter)
+        if not english:
             break
-        kana = input("Kana: ").strip()
-        kanji = input("Kanji: ").strip()
-        if kanji == '':
-            kanji = None
-        confirm = build_confirm(english, kana, kanji)
-        entry = build_entry(english, kana, kanji)
-        response = None
-        while response not in ('', 'y', 'Y', 'n', 'N'):
-            response = input(confirm).strip()
-        if response in ('', 'y', 'Y'):
-            db[WE_ARE].append(entry)
-
-    try:
-        shutil.copy(FILE, '{}.bak'.format(FILE))
-    except FileNotFoundError:
-        pass
-    with open(FILE, 'w', encoding='utf-8') as fp:
-        json.dump(db, fp, ensure_ascii=False)
-
-
-def build_confirm(english, kana, kanji):
-    confirm = english + ": "
-    if kanji:
-        confirm += kanji + ' -- '
-    confirm += kana
-    confirm += "[Y/n] "
-    return confirm
-
-
-def build_entry(english, kana, kanji):
-    entry = {'english': english,
-             'kana': kana
-             }
-    if kanji:
-        entry['kanji'] = kanji
-    return entry
+        entry = {'english': english, 'kana': kana, 'chapter': chapter}
+        if kanji:
+            entry['kanji'] = kanji
+        if confirm(entry):
+            db.append(entry)
+    save_to_json(FILE, {WE_ARE: db})
 
 
 if __name__ == "__main__":

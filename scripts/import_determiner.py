@@ -7,7 +7,7 @@ from lib.basics import (load_from_json,
                         get_basics,
                         confirm)
 
-WE_ARE = 'pronouns'
+WE_ARE = 'determiners'
 FILE = "{}/{}.json".format(DICTIONARY_DIR, WE_ARE)
 
 
