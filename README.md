@@ -11,3 +11,47 @@ language processing.
 This is very much a work in progress. As such, the directories are complete
 spaghetti and are NOT to be considered anywhere near a master work.
 
+
+## Set Up
+
+```
+pip3 install virtualenv
+cd /path/to/this/directory
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+Optionally, one can use virtualenvwrapper as well
+```
+pip install virtualenvwrapper
+echo 'export WORKON_HOME=~Envs' >> ~/.bashrc
+echo 'export WORKON_HOME=~Envs' >> ~/.zshrc
+echo 'source /usr/local/bin/virtualenvwrapper.sh' >> ~/.bashrc
+echo 'source /usr/local/bin/virtualenvwrapper.sh' >> ~/.zshrc
+source ~/.bashrc  # or zshrc
+mkproject japanese
+git clone git@github.com:PentheusLennuye/japanese.git
+```
+
+Don't forget the packages!
+```
+pip install -r requirements.txt
+```
+
+## Use
+
+With VirtualEnv
+```
+cd /path/to/this/directory
+virtualenv venv
+<do stuff>
+deactivate
+```
+
+With VirtualEnvWrapper
+```
+workon japanese
+<do stuff>
+deactivate
+```
