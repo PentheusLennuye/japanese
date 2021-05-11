@@ -5,6 +5,13 @@ from .basics import (get_kanji, get_furigana, load_from_json,
 
 
 articles = ['a', 'an', 'the']
+conjunctions = {
+    'and': ['と', ''],   # missing subleties like たり, や
+    'or':  ['か', ''],   # missing subleties
+    'with': ['て', ''],
+    'but': ['でも', ''],
+    'because': ['から', '']  # missing subleties
+}
 
 
 class NounPhrase:
@@ -49,12 +56,15 @@ class NounPhrase:
             return ' '.join(tokens[1:])
         return noun
 
-    def _split_nouns(self, noun):
-        if noun in self.noun_dict:
-            self._add_noun(noun)
+    def _split_nouns(self, noun_phrase):
+        if noun_phrase in self.noun_dict:  # The phrase IS a noun
+            self._add_noun(noun_phrase)
             return
-        noun_list = noun.split(self.splitter)
+        noun_list = noun_phrase.split(self.splitter)
         for n in noun_list:
+            if n in conjunctions:
+                self.noun_phrase.append(conjunctions[n])
+                continue
             try:
                 self._add_noun(n, False)
             except KeyError:  # Maybe it's a possessive pronoun

@@ -21,12 +21,11 @@ translate = [
     'The library is beside the supermarket.',
     'The post office is in front of the hospital.',
     'The cafe is inside the hotel.',
-    'The bus stop is before the university.',
+    'The bus stop is in front of the university.',
     'The park is behind the hotel.',
     'The supermarket is beside the library.',
     'The hospital is beside the university.',
-    # 'The hospital is between the hotel and the university.'
-    # The last needs a conjunction parser
+#    'The hospital is between the hotel and the university.'
 ]
 
 title = 'Chapter Four Exercise 2A'
