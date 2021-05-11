@@ -3,6 +3,8 @@
 import json
 import os
 
+from .basics import get_furigana
+
 
 class TenseNotAvailableError(Exception):
     pass
@@ -43,12 +45,18 @@ class Conjugator:
     def conjugate(self, tense='indicative', positive=True, polite=True):
         x = 1 if polite else 0  # To map to the JSON for positive and polite
         y = 0 if positive else 1
+        furigana = get_furigana(self.verb)
+        if furigana is None:
+            furigana = ''
+
         if self.verb in self.exceptions:
-            return self.exceptions[self.verb][tense][x][y]
+            return [self.exceptions[self.verb][tense][x][y], furigana]
 
         if self.group == 'irregular':
-            return self.root + self.exceptions['する'][tense][x][y]
-        return self.root + self.endings[self.group][self.stem][tense][x][y]
+            return [self.root + self.exceptions['する'][tense][x][y],
+                    furigana]
+        return [self.root + self.endings[self.group][self.stem][tense][x][y],
+                furigana]
 
     def _set_group(self, verb):
         groups = {

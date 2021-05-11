@@ -57,7 +57,7 @@ def start_exercise():
             prep_dictionary, 'complement'
         )
         complement = build_japanese_spacial_noun_phrase(prep, compl, snp)
-        answers.append(subject + complement + predicate)
+        answers.append(subject + complement + [predicate, ])
     app = wx.App()
     MainFrame(Exercise(title, instructions, questions, answers))
     app.MainLoop()

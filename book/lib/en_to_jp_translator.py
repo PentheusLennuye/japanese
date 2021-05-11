@@ -13,7 +13,7 @@ def build_japanese_spacial_noun_phrase(
 
     noun_parser.build_noun_phrase(eprepositional_complement)
     jprepositional_complement = noun_parser.get_noun_phrase()[0]
-    return jprepositional_complement + ['の', ''] + jpreposition
+    return [jprepositional_complement, ['の', ''], jpreposition]
 
 
 def get_copula(english):
