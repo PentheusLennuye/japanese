@@ -1,5 +1,5 @@
 class SimpleSentence:
-    def __init__(self, subject=[], predicate=[], direct_object=[],
+    def __init__(self, subject=None, predicate=None, direct_object=None,
                  indirect_object=None, copula=None, complement=None):
         self.subject = subject
         self.predicate = predicate
@@ -7,6 +7,12 @@ class SimpleSentence:
         self.direct_object = direct_object
         self.indirect_object = indirect_object
         self.complement = complement
+        self.pos = {
+            'complement': self.complement,
+            'subject': self.subject,
+            'direct_object': self.direct_object,
+            'indirect_object': self.indirect_object
+        }
 
     def console(self):
         print("SimpleSentence / Clause:")
@@ -18,6 +24,17 @@ class SimpleSentence:
         else:
             print("Subject: {}; Copula: {}; Complement: {}".format(
                 self.subject, self.copula, self.complement))
+
+    def extract_preposition(self, prep_dict, part_of_sentence='complement'):
+        ''' returns (preposition, complement) from a noun phrase '''
+        segment = self.pos[part_of_sentence].split()
+        i = len(segment)
+        while i > 0:
+            search = ' '.join(segment[0:i])
+            if search in prep_dict:
+                return search, ' '.join(segment[i:])
+            i -= 1
+        return None, ' '.join(segment)
 
 
 class CompoundSentence:

@@ -38,10 +38,10 @@ def start_exercise():
         "{}/dictionary.json".format(DICTIONARY_DIR), 'dictionary'
     )
     prepositions = load_from_json(
-        "{}/source/prepositions.json".format(DICTIONARY_DIR), 'prepositions'
+        "{}/sources/prepositions.json".format(DICTIONARY_DIR), 'prepositions'
     )
     prep_dictionary = keyed_dictionary(prepositions, 'english')
-    st = SentenceTokenizer(dictionary, prep_dictionary)
+    st = SentenceTokenizer(dictionary)
     snp = NounPhrase(dictionary, 'subject')
     cnp = NounPhrase(dictionary, 'complement')
 
@@ -54,10 +54,12 @@ def start_exercise():
         subject = snp.get_noun_phrase()
         if sentence_parts.copula in ['is', 'am', 'are']:
             predicate = Conjugator(dictionary['to be']).conjugate()
-        prep, compl = sentence_parts.extract_preposition('complement')
+        prep, compl = sentence_parts.extract_preposition(
+            prep_dictionary, 'complement'
+        )
 
-        complement = build_japanese_spacial_noun_phrase(sentence_parts, cnp)
-        print(complement)
+       complement = build_japanese_spacial_noun_phrase(prep, compl, cnp)
+       # print(complement)
     #    answers.append(subject + jcomplement + predicate)
    # app = wx.App()
    # MainFrame(Exercise(title, instructions, questions, answers))

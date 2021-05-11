@@ -1,4 +1,4 @@
-def build_japanese_spacial_noun_phrase(simplesentence, noun_parser):
+def build_japanese_spacial_noun_phrase(preposition, complement, noun_parser):
     ''' Convert English spacial preposition modifying a complement into a
         Japanese spacial noun phrase. Forget about adverbs and adjectives
         for now.'''
