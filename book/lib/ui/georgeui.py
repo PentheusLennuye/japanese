@@ -2,6 +2,7 @@ import wx
 
 JP = 0
 EN = 1
+DEBUG = True
 
 
 class NoKanjiNoFuriganaError(Exception):
@@ -12,6 +13,7 @@ class StaticBlock(wx.StaticText):
     def __init__(self, panel, label):
         super().__init__(panel, label=label)
         self.font = wx.SystemSettings.GetFont(wx.SYS_SYSTEM_FONT)
+        self.SetForegroundColour((0, 0, 0))
 
 
 class ExerciseTitle(StaticBlock):
@@ -31,7 +33,7 @@ class ExerciseInstructions(StaticBlock):
 class EToken(StaticBlock):
     def __init__(self, panel, label):
         super().__init__(panel, label=label)
-        self.font.SetFractionalPointSize(16)
+        self.font.SetFractionalPointSize(12)
         self.SetFont(self.font)
         self.Wrap(0)
 
@@ -43,8 +45,8 @@ class JToken(wx.BoxSizer):
         self.furigana = furigana
         self._set_static_text(panel)
 
-        self.Add(self.get_static_text('f'), 0, wx.LEFT, 0)
-        self.Add(self.get_static_text(), 0, wx.CENTER, 0)
+        self.Add(self.st_furigana, 1, wx.ALL|wx.ALIGN_LEFT, 0)
+        self.Add(self.st_token, 1, wx.ALL|wx.ALIGN_CENTER, 2)
 
     def get_furigana(self):
         return self.furigana
@@ -61,14 +63,22 @@ class JToken(wx.BoxSizer):
             raise NoKanjiNoFuriganaError
 
     def _set_static_text(self, panel):
-        self.st_furigana = wx.StaticText(panel, label=self.furigana)
+        # Furigana
         f_font = wx.SystemSettings.GetFont(wx.SYS_SYSTEM_FONT)
-        f_font.SetFractionalPointSize(9)
+        f_font.SetPointSize(12)
+        self.st_furigana = wx.StaticText(panel,-1,style=wx.ALIGN_LEFT)
+        self.st_furigana.SetForegroundColour((0, 0, 0))
         self.st_furigana.SetFont(f_font)
+        self.st_furigana.SetLabel(self.furigana)
+
+        # Main
         t_font = wx.SystemSettings.GetFont(wx.SYS_SYSTEM_FONT)
-        t_font.SetFractionalPointSize(24)
-        self.st_token = wx.StaticText(panel, label=self.token)
+        t_font.SetPointSize(16)
+        self.st_token = wx.StaticText(panel,-1,style=wx.ALIGN_CENTER)
+        self.st_token.SetForegroundColour((0, 0, 0))
         self.st_token.SetFont(t_font)
+        self.st_token.SetBackgroundColour((0, 200, 200))
+        self.st_token.SetLabel(self.token)
 
 
 class QABox(wx.BoxSizer):
@@ -82,7 +92,7 @@ class QABox(wx.BoxSizer):
     def _set_tokens(self):
         if self.language == JP:
             for word in self.wordlist:
-                self.Add(JToken(self.panel, word[0], word[1]), 0, wx.CENTER, 0)
+                self.Add(JToken(self.panel, word[0], word[1]), 0, wx.CENTER, 2)
         if self.language == EN:
             for word in self.wordlist:
-                self.Add(EToken(self.panel, word), 0, wx.CENTER, 0)
+                self.Add(EToken(self.panel, word), 0, wx.ALL | wx.CENTER, 2)

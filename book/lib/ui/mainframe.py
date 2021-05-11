@@ -6,7 +6,7 @@ from .georgeui import EN, QABox, ExerciseTitle, ExerciseInstructions
 
 class MainFrame(wx.Frame):
     def __init__(self, exercise):
-        super().__init__(parent=None, title='日本語の練習', size=(500, 500))
+        super().__init__(parent=None, title='日本語の練習', size=(700, 400))
         self.exercise = exercise
         self.InitUI()
 
@@ -37,9 +37,9 @@ class MainFrame(wx.Frame):
         self.control_box = wx.BoxSizer(wx.VERTICAL)
         self.control_panel.SetSizer(self.control_box)
 
-        self.main_box.Add(self.header_panel, 1, wx.EXPAND | wx.ALL, 10)
-        self.main_box.Add(self.playfield_panel, 3, wx.EXPAND | wx.ALL, 10)
-        self.main_box.Add(self.control_panel, 1, wx.EXPAND | wx.ALL, 10)
+        self.main_box.Add(self.header_panel, 1, wx.EXPAND | wx.ALL, 5)
+        self.main_box.Add(self.playfield_panel, 3, wx.EXPAND | wx.ALL, 5)
+        self.main_box.Add(self.control_panel, 1, wx.EXPAND | wx.ALL, 5)
 
     def _define_buttons(self):
         self.button = wx.Button(self.control_panel, label='答え')
@@ -95,8 +95,8 @@ class MainFrame(wx.Frame):
         self._add_to_playfield_box(self.question_box)
         self._add_to_playfield_box(self.answer_box)
 
-    def _add_to_playfield_box(self, item, border=10):
-        self.playfield_box.Add(item, 1, wx.ALL | wx.CENTER,  border)
+    def _add_to_playfield_box(self, item, border=2):
+        self.playfield_box.Add(item, 1, wx.CENTER,  border)
 
     def set_control_box(self):
         self.control_box.Add(self.button, 0, wx.CENTER, 5)
