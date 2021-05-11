@@ -50,13 +50,14 @@ def start_exercise():
     for t in translate:
         questions.append(t.split())
         sentence_parts = st.breakdown(t)
+        print(sentence_parts.subject)
         snp.build_noun_phrase(sentence_parts.subject)
         subject = snp.get_noun_phrase()
         if sentence_parts.copula in ['is', 'am', 'are']:
             predicate = Conjugator(dictionary['to be']).conjugate()
         prep, compl = sentence_parts.extract_preposition('complement')
 
-        complement = build_japanese_spacial_noun_phrase(sentence_parts, cnp)
+        #complement = build_japanese_spacial_noun_phrase(sentence_parts, cnp)
         print(complement)
     #    answers.append(subject + jcomplement + predicate)
    # app = wx.App()
