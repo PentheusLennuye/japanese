@@ -3,16 +3,16 @@
 # There isn't.
 # Determine or list whether things exist at a place or not.
 
-# import wx
+import wx
 
 from conf.conf import DICTIONARY_DIR
 from lib.basics import load_from_json, keyed_dictionary
 from lib.sentencetokenizer import SentenceTokenizer
-from lib.en_to_jp_translator import build_japanese_spacial_noun_phrase, get_copula
-# from lib.exercise import Exercise
+from lib.en_to_jp_translator import build_japanese_spacial_noun_phrase
+from lib.exercise import Exercise
 from lib.nounphrase import NounPhrase
 from lib.verbs import Conjugator
-# from lib.ui.mainframe import MainFrame
+from lib.ui.mainframe import MainFrame
 
 
 POLITE = True
@@ -43,14 +43,12 @@ def start_exercise():
     prep_dictionary = keyed_dictionary(prepositions, 'english')
     st = SentenceTokenizer(dictionary)
     snp = NounPhrase(dictionary, 'subject')
-    cnp = NounPhrase(dictionary, 'complement')
 
     questions = []
     answers = []
     for t in translate:
         questions.append(t.split())
         sentence_parts = st.breakdown(t)
-        print(sentence_parts.subject)
         snp.build_noun_phrase(sentence_parts.subject)
         subject = snp.get_noun_phrase()
         if sentence_parts.copula in ['is', 'am', 'are']:
@@ -58,18 +56,11 @@ def start_exercise():
         prep, compl = sentence_parts.extract_preposition(
             prep_dictionary, 'complement'
         )
-
-<<<<<<< HEAD
-        #complement = build_japanese_spacial_noun_phrase(sentence_parts, cnp)
-        print(complement)
-=======
-       complement = build_japanese_spacial_noun_phrase(prep, compl, cnp)
-       # print(complement)
->>>>>>> b81bbd97fa0bfe76ebe579919351b510dee6d767
-    #    answers.append(subject + jcomplement + predicate)
-   # app = wx.App()
-   # MainFrame(Exercise(title, instructions, questions, answers))
-   # app.MainLoop()
+        complement = build_japanese_spacial_noun_phrase(prep, compl, snp)
+        answers.append(subject + complement + predicate)
+    app = wx.App()
+    MainFrame(Exercise(title, instructions, questions, answers))
+    app.MainLoop()
 
 
 if __name__ == '__main__':
