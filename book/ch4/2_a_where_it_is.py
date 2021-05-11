@@ -6,7 +6,7 @@
 # import wx
 
 from conf.conf import DICTIONARY_DIR
-from lib.basics import load_from_json
+from lib.basics import load_from_json, keyed_dictionary
 from lib.sentencetokenizer import SentenceTokenizer
 from lib.en_to_jp_translator import build_japanese_spacial_noun_phrase, get_copula
 # from lib.exercise import Exercise
@@ -37,7 +37,11 @@ def start_exercise():
     dictionary = load_from_json(
         "{}/dictionary.json".format(DICTIONARY_DIR), 'dictionary'
     )
-    st = SentenceTokenizer(dictionary)
+    prepositions = load_from_json(
+        "{}/source/prepositions.json".format(DICTIONARY_DIR), 'prepositions'
+    )
+    prep_dictionary = keyed_dictionary(prepositions, 'english')
+    st = SentenceTokenizer(dictionary, prep_dictionary)
     snp = NounPhrase(dictionary, 'subject')
     cnp = NounPhrase(dictionary, 'complement')
 
@@ -50,6 +54,7 @@ def start_exercise():
         subject = snp.get_noun_phrase()
         if sentence_parts.copula in ['is', 'am', 'are']:
             predicate = Conjugator(dictionary['to be']).conjugate()
+        prep, compl = sentence_parts.extract_preposition('complement')
 
         complement = build_japanese_spacial_noun_phrase(sentence_parts, cnp)
         print(complement)

@@ -11,8 +11,7 @@ dictionary = {}
 
 # pos = "Part of speech"
 
-for pos in ['noun', 'preposition', 'adverb', 'verb', 'adjective',
-            'demonstrative', 'pronoun']:
+for pos in ['noun', 'adverb', 'verb', 'adjective', 'demonstrative', 'pronoun']:
     pos_plural = pos + 's'
     source = load_from_json(
         "{}/{}.json".format(DICTIONARY_DIR, pos_plural), pos_plural
